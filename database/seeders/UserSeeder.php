@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,13 +16,14 @@ class UserSeeder extends Seeder
     {
         $superAdminRole = Role::where('slug', 'super-admin')->first();
         $adminRole = Role::where('slug', 'admin')->first();
-        $userRole = Role::where('slug', 'user')->first();
+        $customerRole = Role::where('slug', 'customer')->first();
 
         // 1. Super Admin
         User::updateOrCreate(
-            ['email' => 'superadmin@gmail.com'],
+            ['email' => 'superadmin@busticket.test'],
             [
                 'name' => 'Super Admin',
+                'phone' => '081234567890',
                 'password' => Hash::make('password'),
                 'role_id' => $superAdminRole->id,
             ]
@@ -30,21 +31,23 @@ class UserSeeder extends Seeder
 
         // 2. Admin
         User::updateOrCreate(
-            ['email' => 'admin@gmail.com'],
+            ['email' => 'admin@busticket.test'],
             [
-                'name' => 'Admin User',
+                'name' => 'Admin BusGo',
+                'phone' => '081234567891',
                 'password' => Hash::make('password'),
                 'role_id' => $adminRole->id,
             ]
         );
 
-        // 3. Regular User
+        // 3. Customer
         User::updateOrCreate(
-            ['email' => 'user@gmail.com'],
+            ['email' => 'customer@busticket.test'],
             [
-                'name' => 'Regular User',
+                'name' => 'Customer Demo',
+                'phone' => '081234567892',
                 'password' => Hash::make('password'),
-                'role_id' => $userRole->id,
+                'role_id' => $customerRole->id,
             ]
         );
 

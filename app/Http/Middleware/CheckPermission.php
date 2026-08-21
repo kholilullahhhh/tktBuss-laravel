@@ -29,10 +29,24 @@ class CheckPermission
 
         // Full route-name map, checked before the suffix map
         $routeNameMap = [
-            'products.export.excel' => 'read',
-            'products.export.pdf' => 'read',
-            'products.import.excel' => 'create',
             'settings.clear-cache' => 'update',
+            'admin.dashboard' => 'read',
+            'admin.bookings.show' => 'read',
+            'admin.bookings.update-status' => 'update',
+            'admin.payments.show' => 'read',
+            'admin.payments.mark-paid' => 'update',
+            'admin.payments.mark-failed' => 'update',
+            'admin.customers.show' => 'read',
+            'admin.schedules.generate-seats' => 'create',
+            'admin.buses.generate-seats' => 'create',
+            'admin.reports.booking' => 'read',
+            'admin.reports.revenue' => 'read',
+            'admin.reports.travel' => 'read',
+            'admin.reports.export-booking' => 'read',
+            'admin.reports.export-revenue' => 'read',
+            'admin.reports.export-travel' => 'read',
+            'admin.reports.print' => 'read',
+            'admin.seats.generate' => 'create',
         ];
 
         $routeName = $request->route()->getName();

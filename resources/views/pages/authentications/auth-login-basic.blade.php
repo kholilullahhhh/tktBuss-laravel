@@ -6,7 +6,7 @@
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Login Basic - Pages')
+@section('title', 'Masuk - Pages')
 
 @section('vendor-style')
    @vite(['resources/assets/vendor/libs/@form-validation/form-validation.scss'])
@@ -48,8 +48,12 @@
                <!-- /Logo -->
 
                <div class="card-body mt-1">
-                  <h4 class="mb-1">Welcome to {{ get_setting('app_name', config('variables.templateName')) }}! 👋</h4>
-                  <p class="mb-5">Please sign-in to your account and start the adventure</p>
+                  <h4 class="mb-1">Selamat Datang di {{ get_setting('app_name', config('variables.templateName')) }}! 👋</h4>
+                  <p class="mb-5">Silakan masuk untuk melanjutkan pemesanan tiket bus Anda.</p>
+
+                  <div class="alert alert-info py-2 small">
+                    Demo: <strong>admin@busticket.test</strong> / <strong>customer@busticket.test</strong> &middot; password: <strong>password</strong>
+                  </div>
 
                   <form id="formAuthentication" class="mb-5" action="{{ route('login') }}" method="POST">
                      @csrf
@@ -84,23 +88,23 @@
                               Remember Me
                            </label>
                         </div>
-                        <a href="javascript:void(0);" class="float-end mb-1 mt-2">
-                           <span>Forgot Password?</span>
+<a href="javascript:void(0);" class="float-end mb-1 mt-2">
+                           <span>Lupa Password?</span>
                         </a>
                      </div>
                      <div class="mb-5">
-                        <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+                        <button class="btn btn-primary d-grid w-100" type="submit">Masuk</button>
                      </div>
-                  </form>
+                   </form>
 
-                  @if (get_setting('allow_registration', '1') === '1')
-                     <p class="text-center">
-                        <span>New on our platform?</span>
-                        <a href="{{ route('register') }}">
-                           <span>Create an account</span>
-                        </a>
-                     </p>
-                  @endif
+                   @if (get_setting('allow_registration', '1') === '1')
+                      <p class="text-center">
+                         <span>Belum punya akun?</span>
+                         <a href="{{ route('register') }}">
+                            <span>Daftar sekarang</span>
+                         </a>
+                      </p>
+                   @endif
 
                   <div class="divider my-5">
                      <div class="divider-text">or</div>

@@ -3,16 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\LogsActivity;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Sanctum\HasApiTokens;
-use App\Traits\LogsActivity;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, LogsActivity;
+    /** @use HasFactory<UserFactory> */
+    use HasApiTokens, HasFactory, LogsActivity, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +23,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
         'role_id',
         'avatar',
@@ -30,6 +32,21 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role && in_array($this->role->slug, ['super-admin', 'admin']);
+    }
+
+    public function isCustomer(): bool
+    {
+        return $this->role && $this->role->slug === 'customer';
     }
 
     /**
@@ -57,13 +74,19 @@ class User extends Authenticatable
 
     public function hasPermission($menuSlug, $action)
     {
-        if (!$this->role) return false;
+        if (! $this->role) {
+            return false;
+        }
 
         // Super Admin bypass
-        if ($this->role->slug === 'super-admin') return true;
+        if ($this->role->slug === 'super-admin') {
+            return true;
+        }
 
         $menu = $this->role->menus()->where('menus.slug', $menuSlug)->first();
-        if (!$menu) return false;
+        if (! $menu) {
+            return false;
+        }
 
         return (bool) $menu->pivot->{"can_{$action}"};
     }

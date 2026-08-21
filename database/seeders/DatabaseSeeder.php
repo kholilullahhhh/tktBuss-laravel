@@ -15,7 +15,12 @@ class DatabaseSeeder extends Seeder
             RoleAndMenuSeeder::class,
             UserSeeder::class,
             SettingSeeder::class,
-            ExtraMenuSeeder::class,
+            OperatorSeeder::class,
+            TerminalSeeder::class,
+            BusSeeder::class,
+            RouteSeeder::class,
+            ScheduleSeeder::class,
+            BookingSeeder::class,
         ]);
     }
 }

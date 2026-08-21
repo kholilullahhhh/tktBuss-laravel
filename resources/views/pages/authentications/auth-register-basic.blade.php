@@ -47,8 +47,8 @@
                </div>
                <!-- /Logo -->
                <div class="card-body mt-1">
-                  <h4 class="mb-1">Adventure starts here 🚀</h4>
-                  <p class="mb-5">Daftar sekarang untuk melihat demo fitur secara langsung!</p>
+                  <h4 class="mb-1">Daftar Akun Baru 🚀</h4>
+                  <p class="mb-5">Buat akun Customer untuk mulai memesan tiket bus.</p>
 
                   <form id="formAuthentication" class="mb-5" action="{{ route('register') }}" method="POST">
                      @csrf
@@ -68,13 +68,21 @@
                            <span class="text-danger small">{{ $message }}</span>
                         @enderror
                      </div>
+                     <div class="form-floating form-floating-outline mb-5">
+                        <input type="text" class="form-control" id="phone" name="phone"
+                           value="{{ old('phone') }}" placeholder="0812xxxxxxx">
+                        <label for="phone">No. HP <span class="text-muted">(opsional)</span></label>
+                        @error('phone')
+                           <span class="text-danger small">{{ $message }}</span>
+                        @enderror
+                     </div>
                      <div class="mb-5 form-password-toggle">
                         <div class="input-group input-group-merge">
                            <div class="form-floating form-floating-outline">
                               <input type="password" id="password" class="form-control" name="password"
                                  placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                  aria-describedby="password" />
-                              <label for="password">Password</label>
+                              <label for="password">Password (min. 8 karakter)</label>
                            </div>
                            <span class="input-group-text cursor-pointer"><i class="ri-eye-off-line"></i></span>
                         </div>
@@ -107,10 +115,10 @@
                            <span class="text-danger small">{{ $message }}</span>
                         @enderror
                      </div>
-                     <button class="btn btn-primary d-grid w-100">
-                        Daftar Sebagai Pengunjung
+<button class="btn btn-primary d-grid w-100">
+                        Daftar Sebagai Customer
                      </button>
-                  </form>
+                   </form>
 
                   <p class="text-center">
                      <span>Sudah memiliki akun?</span>

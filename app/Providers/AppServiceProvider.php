@@ -3,6 +3,19 @@
 namespace App\Providers;
 
 use App\Helpers\ViewConfigHelper;
+use App\Repositories\BusRepository;
+use App\Repositories\MenuRepository;
+use App\Repositories\OperatorRepository;
+use App\Repositories\RoleRepository;
+use App\Repositories\RouteRepository;
+use App\Repositories\ScheduleRepository;
+use App\Repositories\SeatRepository;
+use App\Repositories\TerminalRepository;
+use App\Repositories\UserRepository;
+use App\Services\SettingService;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -16,19 +29,39 @@ class AppServiceProvider extends ServiceProvider
         // Repository bindings (contract => concrete)
         $this->app->bind(
             \App\Contracts\Repositories\UserRepository::class,
-            \App\Repositories\UserRepository::class
+            UserRepository::class
         );
         $this->app->bind(
             \App\Contracts\Repositories\RoleRepository::class,
-            \App\Repositories\RoleRepository::class
+            RoleRepository::class
         );
         $this->app->bind(
             \App\Contracts\Repositories\MenuRepository::class,
-            \App\Repositories\MenuRepository::class
+            MenuRepository::class
         );
         $this->app->bind(
-            \App\Contracts\Repositories\ProductsRepository::class,
-            \App\Repositories\ProductsRepository::class
+            \App\Contracts\Repositories\OperatorRepository::class,
+            OperatorRepository::class
+        );
+        $this->app->bind(
+            \App\Contracts\Repositories\BusRepository::class,
+            BusRepository::class
+        );
+        $this->app->bind(
+            \App\Contracts\Repositories\SeatRepository::class,
+            SeatRepository::class
+        );
+        $this->app->bind(
+            \App\Contracts\Repositories\TerminalRepository::class,
+            TerminalRepository::class
+        );
+        $this->app->bind(
+            \App\Contracts\Repositories\RouteRepository::class,
+            RouteRepository::class
+        );
+        $this->app->bind(
+            \App\Contracts\Repositories\ScheduleRepository::class,
+            ScheduleRepository::class
         );
     }
 
@@ -38,18 +71,18 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Define Gates for authorization
-        \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
+        Gate::before(function ($user, $ability) {
             if ($user->role && $user->role->slug === 'super-admin') {
                 return true;
             }
         });
 
-        \Illuminate\Support\Facades\Gate::define('access', function ($user, $slug, $action) {
+        Gate::define('access', function ($user, $slug, $action) {
             return $user->hasPermission($slug, $action);
         });
 
         // Use Bootstrap 5 for pagination
-        \Illuminate\Pagination\Paginator::useBootstrapFive();
+        Paginator::useBootstrapFive();
 
         // Create Helper alias for ViewConfigHelper
         if (! class_exists('Helper')) {
@@ -57,7 +90,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         // Blade directive for settings
-        \Illuminate\Support\Facades\Blade::directive('setting', function ($expression) {
+        Blade::directive('setting', function ($expression) {
             return "<?php echo get_setting($expression); ?>";
         });
 
@@ -86,13 +119,13 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Share template variables config from Database or defaults
-        $settingService = app(\App\Services\SettingService::class);
+        $settingService = app(SettingService::class);
 
         config([
             'variables' => [
-                'templateName' => $settingService->get('app_name', 'Base Laravel'),
-                'templateDescription' => $settingService->get('app_description', 'Base project builder'),
-                'templateKeyword' => $settingService->get('app_keywords', 'laravel, dashboard'),
+                'templateName' => $settingService->get('app_name', 'BusGo'),
+                'templateDescription' => $settingService->get('app_description', 'Aplikasi pemesanan tiket bus online'),
+                'templateKeyword' => $settingService->get('app_keywords', 'tiket bus, pemesanan, transportasi'),
                 'templateLogo' => $settingService->get('app_logo'),
                 'templateFavicon' => $settingService->get('app_favicon'),
                 'templateVersion' => '1.0.0',
@@ -100,9 +133,9 @@ class AppServiceProvider extends ServiceProvider
                 'templatePrefix' => '',
                 'templateSuffix' => '',
                 'templateDomain' => 'localhost',
-                'templateAuthor' => 'Ooka Pratama',
+                'templateAuthor' => 'BusGo Team',
                 'templateAuthorUrl' => '#',
-                'creatorName' => 'Ooka Pratama',
+                'creatorName' => 'BusGo',
                 'creatorUrl' => '#',
                 'documentation' => 'https://demos.pixinvent.com/materialize-html-admin-template/documentation/',
                 'contactEmail' => $settingService->get('contact_email'),

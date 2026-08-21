@@ -99,14 +99,13 @@ test('should reject non-image app logo upload when updating settings', function 
 |--------------------------------------------------------------------------
 */
 
-test('should deny products excel import when user has read-only permission', function () {
-    // Route suffix "excel" was unmapped and previously defaulted to "read",
-    // letting read-only users create data through the import endpoint.
-    $user = createReadOnlyUser(['products.index']);
+test('should deny seat generation when user has read-only permission', function () {
+    // The generate action maps to "create" and must be denied for read-only users.
+    $user = createReadOnlyUser(['admin.seats.index']);
 
     $this->actingAs($user)
-        ->post(route('products.import.excel'), [
-            'file' => UploadedFile::fake()->create('products.xlsx', 10),
+        ->post(route('admin.seats.generate'), [
+            'bus_id' => 1,
         ])
         ->assertStatus(403);
 });
@@ -120,11 +119,23 @@ test('should deny settings cache clear when user has read-only permission', func
         ->assertStatus(403);
 });
 
-test('should allow products excel export when user has read permission', function () {
-    // Export is a read action and must remain accessible to read-only users.
-    $user = createReadOnlyUser(['products.index']);
+test('should allow report export when user has read permission', function () {
+    // Export is a read action and must remain accessible to a user who holds
+    // read permission on the menu, even though they lack create/update.
+    $adminRole = Role::firstOrCreate(['slug' => 'admin'], ['name' => 'Admin']);
+    $menu = Menu::firstOrCreate(['slug' => 'admin.reports.booking'], [
+        'name' => 'Laporan Booking',
+        'path' => 'admin/reports/booking',
+        'order_no' => 1,
+    ]);
 
-    $response = $this->actingAs($user)->get(route('products.export.excel'));
+    $adminRole->menus()->syncWithoutDetaching([
+        $menu->id => ['can_create' => 0, 'can_read' => 1, 'can_update' => 0, 'can_delete' => 0],
+    ]);
+
+    $user = User::factory()->create(['role_id' => $adminRole->id]);
+
+    $response = $this->actingAs($user)->get(route('admin.reports.export-booking'));
 
     // The export returns a BinaryFileResponse; the middleware must not block it.
     expect($response->baseResponse->getStatusCode())->not->toBe(403);

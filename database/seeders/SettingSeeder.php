@@ -13,21 +13,21 @@ class SettingSeeder extends Seeder
             // General
             [
                 'key' => 'app_name',
-                'value' => 'Base Laravel',
+                'value' => 'BusGo',
                 'group' => 'general',
                 'type' => 'text',
                 'label' => 'Nama Aplikasi',
             ],
             [
                 'key' => 'app_description',
-                'value' => 'Base project builder untuk project Ooka Pratama.',
+                'value' => 'Pesan tiket bus online dengan mudah, cepat, dan aman.',
                 'group' => 'general',
                 'type' => 'textarea',
                 'label' => 'Deskripsi Aplikasi',
             ],
             [
                 'key' => 'app_keywords',
-                'value' => 'laravel, base template, premium dashboard',
+                'value' => 'bus, tiket bus, travel, booking online, pemesanan tiket',
                 'group' => 'general',
                 'type' => 'text',
                 'label' => 'Kata Kunci SEO',
@@ -50,7 +50,7 @@ class SettingSeeder extends Seeder
             // Contact & Social
             [
                 'key' => 'contact_email',
-                'value' => 'admin@ooka.id',
+                'value' => 'admin@busticket.test',
                 'group' => 'contact',
                 'type' => 'text',
                 'label' => 'Email Kontak',
@@ -64,7 +64,7 @@ class SettingSeeder extends Seeder
             ],
             [
                 'key' => 'social_instagram',
-                'value' => 'https://instagram.com/ookapratama',
+                'value' => 'https://instagram.com/busgo',
                 'group' => 'contact',
                 'type' => 'text',
                 'label' => 'URL Instagram',
