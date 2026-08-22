@@ -40,7 +40,7 @@ For in-depth explanations of the features and how to use them, please refer to t
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/kholilullahhhh/tktbuss.git
+git clone https://github.com/kholilullahhhh/tktBuss-laravel.git
 cd base-laravel
 composer install && npm install
 ```
